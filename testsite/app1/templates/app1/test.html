@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+      {% for item in animals %}
+         <p>{{item.user}}</p><br>
+         <p>{{item.device}}</p><br>
+         <p>{{item.asset_name}}</p><br>
+         <p>{{item.current_lat}}</p><br>
+         <p>{{item.current_lng}}</p><br>
+         <p>{{item.battery_status}}</p><br>
+         <p>{{item.is_inzone}}</p><br>
+         <p>{{item.datetime}}</p><br>
+    {% endfor %} 
+</body>
+</html>
