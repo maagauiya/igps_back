@@ -4,5 +4,5 @@ from .views import*
 
 urlpatterns=[
     path('',index,name='main page'),
-    path('device/<int:assetid>/',checker)
+    # path('device/<int:assetid>/',checker)
 ]
