@@ -28,20 +28,19 @@ def index(request):
 
 @login_required(login_url='')
 def checker(request,user,assetid):
+    devices=App1.objects.filter(user=assetid)
+    context={
+        "animals" : devices,
+    }
+    # devices2=serializers.serialize("json",context)
+    
+    # print(devices2)
 
-
-    # devices=App1.objects.filter(user=assetid)
-
-    # context={
-    #     'animals':devices,
-    # }
-
-    devices=serializers.serialize("json",App1.objects.filter(user=assetid))
-
+    # devices=serializers.serialize("json",App1.objects.filter(user=assetid))
+    # print(devices)
     if user is not None:
-        return render(request,'app1/map.html', devices)
-    else:
-        return HttpResponse('unsucc')
+        #return render(request,'app1/map.html', context = json.dumps(context.dict))
+        return render(request,'app1/map.html', context=context)
 
 
 def pageNotFound(request,exception):

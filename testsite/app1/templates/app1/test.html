@@ -1,6 +1,8 @@
+{%load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="{% static 'app1/css/test.css' %}"/>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +10,14 @@
 </head>
 <body>
       {% for item in animals %}
-         <p>{{item.user}}</p><br>
-         <p>{{item.device}}</p><br>
-         <p>{{item.asset_name}}</p><br>
-         <p>{{item.current_lat}}</p><br>
-         <p>{{item.current_lng}}</p><br>
-         <p>{{item.battery_status}}</p><br>
-         <p>{{item.is_inzone}}</p><br>
-         <p>{{item.datetime}}</p><br>
+         <p class=pp>{{item.user}}</p><br>
+         <p class=pp>{{item.device}}</p><br>
+         <p class=pp>{{item.asset_name}}</p><br>
+         <p class=pp>{{item.current_lat}}</p><br>
+         <p class=pp>{{item.current_lng}}</p><br>
+         <p class=pp>{{item.battery_status}}</p><br>
+         <p class=pp>{{item.is_inzone}}</p><br>
+         <p class=pp>{{item.datetime}}</p><br>
     {% endfor %} 
 </body>
 </html>

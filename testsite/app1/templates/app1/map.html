@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Map</title>
     <style>
+        #current_lat{ 
+            display: none;
+        }
+        #current_lng{ 
+            display: none;
+        }
         #map{
             height: 100%;
             width: 100%;
@@ -19,7 +25,10 @@
     </style>
 </head>
 <body>
-    
+    {% for item in animals %} 
+    <p id="current_lat">{{item.current_lat}}</p>
+    <p id="current_lng">{{item.current_lng}}</p>
+    {% endfor %}
     <div id="map"></div>
     <script>
         function initMap() {
@@ -63,21 +72,18 @@
 
         
         function addMarker() {
-            var data=JSON.parse('{{devices|safe}}')
-            console.log(x.user)
-            for (var x in data) {
+            for (let i = 0; i < 2; i++) {
+                console.log(document.getElementById('current_lat').innerHTML)
                 var marker = new google.maps.Marker({
                 position: {
-                    lat: x.current_lat, lng: x.current_lng
+                    lat: parseInt(document.getElementById('current_lat').innerHTML), lng:parseInt(document.getElementById('current_lng').innerHTML)
                 },
                 map: map,
                 icon: {
                     url: 'https://img.icons8.com/color/96/000000/horses-sign.png',
                     scaledSize: new window.google.maps.Size(70, 70)}
                 })
-            }
-
-           
+            }  
         }
     }
     </script>
