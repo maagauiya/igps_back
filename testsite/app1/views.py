@@ -3,6 +3,8 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.decorators import login_required
+
 
 from .models import*
 # Create your views here.
@@ -19,7 +21,8 @@ def index(request):
             return HttpResponse('unsucc')
     else:
         return render(request,'app1/signin.html')
-@csrf_protect
+        
+@login_required(login_url='')
 def checker(request,user,assetid):
     devices=App1.objects.filter(user=assetid)
     context={

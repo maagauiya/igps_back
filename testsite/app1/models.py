@@ -10,4 +10,3 @@ class App1(models.Model):
     battery_status=models.CharField(max_length=15,blank=True,null=True)
     is_inzone=models.BooleanField(blank=True,null=True)
     datetime=models.DateTimeField(blank=True,null=True)
-    
