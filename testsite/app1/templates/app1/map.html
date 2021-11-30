@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map</title>
+    <style>
+        #map{
+            height: 100%;
+            width: 100%;
+        }
+        body, html {
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="map"></div>
+    <script>
+        function initMap() {
+            //Map Options
+            var options = {
+                zoom: 10,
+                center: {
+                    lat: 49.838322, lng: 73.115601
+                },
+                streetViewControl: false, 
+                mapTypeId: "satellite"
+            }
+
+            //New Map
+            var map = new google.maps.Map(document.getElementById('map'), options);
+
+
+
+
+            //Add Marker
+            /*var marker = new google.maps.Marker({
+                position: {
+                    lat: 42.4668, lng: 70.9495  
+                },
+                map: map,
+                icon: {
+                    url: 'https://img.icons8.com/color/96/000000/horses-sign.png',
+                    scaledSize: new window.google.maps.Size(70, 70)}
+            })
+
+
+            //Info Window
+            var infoWindow = new google.maps.InfoWindow({
+                content: 'Состояние батареи: '
+            })
+            marker.addListener('click', function() {
+                infoWindow.open(map, marker);
+            });*/
+
+        addMarker();
+
+        
+        function addMarker() {
+            var data=JSON.parse('{{devices|safe}}')
+            console.log(x.user)
+            for (var x in data) {
+                var marker = new google.maps.Marker({
+                position: {
+                    lat: x.current_lat, lng: x.current_lng
+                },
+                map: map,
+                icon: {
+                    url: 'https://img.icons8.com/color/96/000000/horses-sign.png',
+                    scaledSize: new window.google.maps.Size(70, 70)}
+                })
+            }
+
+           
+        }
+    }
+    </script>
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8gYHQggRVm5HmlLmPy4MQeyQ59B0AVIY&callback=initMap&v=weekly"
+    async
+    ></script>
+</body>
+</html>
