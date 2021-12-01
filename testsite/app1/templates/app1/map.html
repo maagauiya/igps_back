@@ -6,12 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Map</title>
     <style>
-        #current_lat{ 
-            display: none;
-        }
-        #current_lng{ 
-            display: none;
-        }
         #map{
             height: 100%;
             width: 100%;
@@ -25,10 +19,6 @@
     </style>
 </head>
 <body>
-    {% for item in animals %} 
-    <p id="current_lat">{{item.current_lat}}</p>
-    <p id="current_lng">{{item.current_lng}}</p>
-    {% endfor %}
     <div id="map"></div>
     <script>
         function initMap() {
@@ -44,46 +34,36 @@
 
             //New Map
             var map = new google.maps.Map(document.getElementById('map'), options);
+            addMarker();
 
-
-
-
-            //Add Marker
-            /*var marker = new google.maps.Marker({
-                position: {
-                    lat: 42.4668, lng: 70.9495  
-                },
-                map: map,
-                icon: {
-                    url: 'https://img.icons8.com/color/96/000000/horses-sign.png',
-                    scaledSize: new window.google.maps.Size(70, 70)}
-            })
-
-
-            //Info Window
             var infoWindow = new google.maps.InfoWindow({
                 content: 'Состояние батареи: '
-            })
-            marker.addListener('click', function() {
-                infoWindow.open(map, marker);
-            });*/
-
-        addMarker();
+                
+            });
+            
 
         
         function addMarker() {
-            for (let i = 0; i < 2; i++) {
-                console.log(document.getElementById('current_lat').innerHTML)
+            
+
+            //var data = JSON.stringify('{{animals|safe}}')
+            var data = eval(JSON.parse("{{ animals | escapejs }}"));
+            //var data = "{{animals|escapejs}}"
+            
+            for (let i = 0; i < data.length; i++) {
                 var marker = new google.maps.Marker({
                 position: {
-                    lat: parseInt(document.getElementById('current_lat').innerHTML), lng:parseInt(document.getElementById('current_lng').innerHTML)
+                    lat: parseInt(data[i]["fields"].current_lat), lng: parseInt(data[i]["fields"].current_lng)
                 },
                 map: map,
                 icon: {
                     url: 'https://img.icons8.com/color/96/000000/horses-sign.png',
                     scaledSize: new window.google.maps.Size(70, 70)}
-                })
-            }  
+                }) 
+            }
+            marker.addListener('click', function() {
+                infoWindow.open(map, marker);
+            });
         }
     }
     </script>
