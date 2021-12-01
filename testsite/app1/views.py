@@ -10,9 +10,6 @@ import json
 from django.forms.models import model_to_dict
 
 from .models import*
-
-# Create your views here.
-
 def index(request):
     if request.method=='POST':
         username = request.POST['username']

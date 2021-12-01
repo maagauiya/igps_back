@@ -8,6 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Map</title>
     <style>
+        #br1{ 
+            content: "";
+            margin: 0em;
+            display: block;
+            font-size: 20%
+        }
         #map{
             height: 100%;
             width: 100%;
@@ -24,7 +30,6 @@
     <div id="map"></div>
     <script>
         function initMap() {
-            //Map Options
             var options = {
                 zoom: 10,
                 center: {
@@ -33,25 +38,12 @@
                 streetViewControl: false, 
                 mapTypeId: "satellite"
             }
-
-            //New Map
             var map = new google.maps.Map(document.getElementById('map'), options);
-            addMarker();
-
-            var infoWindow = new google.maps.InfoWindow({
-                content: 'Состояние батареи: '
-                
-            });
-            
-
-        
+            const array=[];
+            const array2=[];
+            addMarker(); 
         function addMarker() {
-            
-
-            //var data = JSON.stringify('{{animals|safe}}')
             var data = eval(JSON.parse("{{ animals | escapejs }}"));
-            //var data = "{{animals|escapejs}}"
-            
             for (let i = 0; i < data.length; i++) {
                 var marker = new google.maps.Marker({
                 position: {
@@ -62,12 +54,21 @@
                     url: 'https://img.icons8.com/color/96/000000/horses-sign.png',
                     scaledSize: new window.google.maps.Size(70, 70)}
                 }) 
+                array.push(marker);
+                array2.push(data[i]);
             }
-            marker.addListener('click', function() {
-                infoWindow.open(map, marker);
+            for (let i = 0; i <data.length; i++){ 
+            array[i].addListener('click', function() {
+                var infoWindow = new google.maps.InfoWindow({
+                content: "<p>Имя трекера:" + array2[i]["fields"].asset_name +" </p>" + "<br id='br1'> <p>Статус батареи:" + 
+                    array2[i]["fields"].battery_status+" </p>" + "<br id='br1'><p>Даты и время:" + 
+                        array2[i]["fields"].datetime + " </p>"
+            });
+            infoWindow.open(map,array[i])
             });
         }
     }
+}
     </script>
     <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8gYHQggRVm5HmlLmPy4MQeyQ59B0AVIY&callback=initMap&v=weekly"
