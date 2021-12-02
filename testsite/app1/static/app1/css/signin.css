@@ -6,13 +6,9 @@ body{
 .card {
   width: 400px !important;
   height: 400px !important;
-  margin: 0 auto; /* Added */
-        float: none; /* Added */
-        margin-bottom: 10px; /* Added */
-  /* position: relative !important;
-  left: 60% !important;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 1px 15px 1px rgba(52,40,104,.08); */
+  margin: 0 auto; 
+  float: none; 
+  margin-bottom: 10px; 
 }
 .form-control{
   height: 30px !important;
