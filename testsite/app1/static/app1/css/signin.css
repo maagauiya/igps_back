@@ -1,5 +1,5 @@
-body{
-    margin-top:7%;
+html,body{
+    /* margin-top:7%; */
     background-color: #f2f3f8;
      overflow-x: hidden;
 }
@@ -42,4 +42,8 @@ body{
 .logo{ 
     width: 100px !important;
   height: 75px !important;
+}
+.oo{
+  position: relative !important;
+  top: 400px !important;
 }

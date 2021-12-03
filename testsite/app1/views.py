@@ -1,13 +1,13 @@
 import json
 from django.core import serializers
 from django.http.response import Http404, HttpResponseNotFound, HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 import json 
-from django.forms.models import model_to_dict
+from django.contrib import messages
 
 from .models import*
 def index(request):
@@ -19,7 +19,8 @@ def index(request):
             login(request, user)
             return checker(request,user,user.pk)
         else:
-            return HttpResponse('unsucc')
+            messages.error(request,'Введен неверный логин или пароль')
+            return render(request,'app1/signin.html')
     else:
         return render(request,'app1/signin.html')
 
@@ -31,8 +32,6 @@ def checker(request,user,assetid):
     }
     if user is not None:
         return render(request,'app1/map.html', context)
-    else:
-        return HttpResponse('unsucc')
 
 
 def pageNotFound(request,exception):
