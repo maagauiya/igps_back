@@ -6,6 +6,9 @@
     <link rel="icon" type="image/x-icon" sizes="16x16" href="{% static 'app1/images/favicon.ico'%}"> 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'app1/css/navbar.css'%}"/>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
     <title>Map</title>
     <style>
         #br1{ 
@@ -27,6 +30,20 @@
     </style>
 </head>
 <body>
+
+    <div id="gg">
+        <div class="btn">
+            <span class="fas fa-bars"></span>
+         </div>
+         <nav class="sidebar">
+            <ul>
+               <li><a href="#">Активы</a></li>
+               <li><a href="#">Настройки</a></li>
+               <li><a href="#">Уведомления</a></li>
+               <li><a href="#">Выйти</a></li>
+            </ul>
+         </nav>
+    </div>
     <div id="map"></div>
     <script>
         function initMap() {
@@ -36,7 +53,12 @@
                     lat: 49.838322, lng: 73.115601
                 },
                 streetViewControl: false, 
-                mapTypeId: "satellite"
+                mapTypeId: "satellite",
+                mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.TOP_RIGHT,
+                
+    }
             }
             var map = new google.maps.Map(document.getElementById('map'), options);
             const array=[];
@@ -68,11 +90,28 @@
             });
         }
     }
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('gg'));
 }
+        $('.btn').click(function(){
+           $(this).toggleClass("click");
+           $('.sidebar').toggleClass("show");
+         });
+           $('.feat-btn').click(function(){
+             $('nav ul .feat-show').toggleClass("show");
+             $('nav ul .first').toggleClass("rotate");
+           });
+           $('.serv-btn').click(function(){
+             $('nav ul .serv-show').toggleClass("show1");
+             $('nav ul .second').toggleClass("rotate");
+           });
+           $('nav ul li').click(function(){
+             $(this).addClass("active").siblings().removeClass("active");
+           });
     </script>
     <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8gYHQggRVm5HmlLmPy4MQeyQ59B0AVIY&callback=initMap&v=weekly"
     async
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
