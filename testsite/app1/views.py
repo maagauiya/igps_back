@@ -30,8 +30,9 @@ def checker(request,user,assetid):
     context={
         "animals" : devices,
     }
+
     if user is not None:
-        return render(request,'app1/map.html', context)
+        return render(request,'app1/map.html', context=context,)
 
 
 def pageNotFound(request,exception):

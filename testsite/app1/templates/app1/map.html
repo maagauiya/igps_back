@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" sizes="16x16" href="{% static 'app1/images/favicon.ico'%}"> 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'app1/css/navbar.css'%}"/>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Bitter&display=swap" rel="stylesheet">
     <title>Map</title>
     <style>
         #br1{ 
@@ -30,14 +32,32 @@
     </style>
 </head>
 <body>
-
+   
+    <div class="card" id="gg2">
+        <h1 class="headerttext" id="mainname">Айгыр</h1>
+        <button type='button' class='close' onclick='$(this).parent().hide();'></button>
+        <hr class="linee">
+        <ul>
+            <li class="ttext" id="timee" >Время:</li>
+            <li class="ttext" id="sosto">Общее состояние:</li>
+            <li class="ttext" id="btst">Статус заряда:</li>
+            <li class="ttext" id="latt">Широта:</li>
+            <li class="ttext" id="lngg">Долгота:</li>
+          </ul>
+    </div>
     <div id="gg">
         <div class="btn">
             <span class="fas fa-bars"></span>
          </div>
          <nav class="sidebar">
             <ul>
-               <li><a href="#">Активы</a></li>
+                <li>
+                    <a href="#" class="feat-btn">Активы
+                    <span class="fas fa-caret-down first"></span>
+                    </a>
+                    <ul class="feat-show" id="uu2">
+                    </ul>
+                 </li>
                <li><a href="#">Настройки</a></li>
                <li><a href="#">Уведомления</a></li>
                <li><a href="#">Выйти</a></li>
@@ -87,10 +107,13 @@
                         array2[i]["fields"].datetime + " </p>"
             });
             infoWindow.open(map,array[i])
+            ss(array2[i])
             });
         }
     }
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('gg'));
+    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('gg2'));
+
 }
         $('.btn').click(function(){
            $(this).toggleClass("click");
@@ -107,6 +130,24 @@
            $('nav ul li').click(function(){
              $(this).addClass("active").siblings().removeClass("active");
            });
+           function ss(obj){
+            document.getElementById("mainname").innerHTML = obj["fields"].asset_name;
+            document.getElementById("timee").innerHTML = "Время: "+obj["fields"].datetime;
+            document.getElementById("sosto").innerHTML = "Общее состояние: "+obj["fields"].is_inzone;
+            document.getElementById("btst").innerHTML = "Статус заряда: "+obj["fields"].battery_status;
+            document.getElementById("latt").innerHTML = "Широта: "+obj["fields"].current_lat;
+            document.getElementById("lngg").innerHTML = "Долгота: "+obj["fields"].current_lng;
+           }
+           function function1() {
+            var ul = document.getElementById("uu2");
+            var a = document.createElement("a");
+            a.appendChild(document.createTextNode("Айгыр"));
+            a.setAttribute("href", "#")
+            var li = document.createElement("li");
+            li.appendChild(a);
+            ul.appendChild(li);
+            }
+            function1()
     </script>
     <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8gYHQggRVm5HmlLmPy4MQeyQ59B0AVIY&callback=initMap&v=weekly"
