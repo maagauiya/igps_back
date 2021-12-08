@@ -66,6 +66,21 @@
     </div>
     <div id="map"></div>
     <script>
+        var data = eval(JSON.parse("{{ animals | escapejs }}"));
+         const array2=[];
+         function function1() {
+            for (let i = 0; i <data.length; i++){ 
+            var ul = document.getElementById("uu2");
+            var a = document.createElement("a");
+            a.appendChild(document.createTextNode(data[i]["fields"].asset_name));
+            a.setAttribute("href", "#")
+            a.setAttribute("id", data[i].pk)
+            var li = document.createElement("li");
+            li.appendChild(a);
+            ul.appendChild(li); 
+            }
+        }
+            function1()
         function initMap() {
             var options = {
                 zoom: 10,
@@ -82,10 +97,9 @@
             }
             var map = new google.maps.Map(document.getElementById('map'), options);
             const array=[];
-            const array2=[];
+            
             addMarker(); 
         function addMarker() {
-            var data = eval(JSON.parse("{{ animals | escapejs }}"));
             for (let i = 0; i < data.length; i++) {
                 var marker = new google.maps.Marker({
                 position: {
@@ -107,12 +121,22 @@
                         array2[i]["fields"].datetime + " </p>"
             });
             infoWindow.open(map,array[i])
-            ss(array2[i])
             });
+            document.getElementById(data[i].pk).onclick = function(){ 
+                document.getElementById("mainname").innerHTML = data[i]["fields"].asset_name;
+                document.getElementById("timee").innerHTML = "Время: "+data[i]["fields"].datetime;
+                document.getElementById("sosto").innerHTML = "Общее состояние: <span style="+" color: green !important;"+">"+data[i]["fields"].is_inzone+"</span>";
+                document.getElementById("btst").innerHTML = "Статус заряда: "+data[i]["fields"].battery_status;
+                document.getElementById("latt").innerHTML = "Широта: "+data[i]["fields"].current_lat;
+                document.getElementById("lngg").innerHTML = "Долгота: "+data[i]["fields"].current_lng;
+                document.getElementById("gg2").style.display = "block";
+
+
+             }
         }
     }
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('gg'));
-    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('gg2'));
+        map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('gg2'));
 
 }
         $('.btn').click(function(){
@@ -130,24 +154,7 @@
            $('nav ul li').click(function(){
              $(this).addClass("active").siblings().removeClass("active");
            });
-           function ss(obj){
-            document.getElementById("mainname").innerHTML = obj["fields"].asset_name;
-            document.getElementById("timee").innerHTML = "Время: "+obj["fields"].datetime;
-            document.getElementById("sosto").innerHTML = "Общее состояние: "+obj["fields"].is_inzone;
-            document.getElementById("btst").innerHTML = "Статус заряда: "+obj["fields"].battery_status;
-            document.getElementById("latt").innerHTML = "Широта: "+obj["fields"].current_lat;
-            document.getElementById("lngg").innerHTML = "Долгота: "+obj["fields"].current_lng;
-           }
-           function function1() {
-            var ul = document.getElementById("uu2");
-            var a = document.createElement("a");
-            a.appendChild(document.createTextNode("Айгыр"));
-            a.setAttribute("href", "#")
-            var li = document.createElement("li");
-            li.appendChild(a);
-            ul.appendChild(li);
-            }
-            function1()
+            document.getElementById("gg2").style.display = "none";
     </script>
     <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8gYHQggRVm5HmlLmPy4MQeyQ59B0AVIY&callback=initMap&v=weekly"

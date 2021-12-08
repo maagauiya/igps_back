@@ -118,7 +118,7 @@ nav ul li a span.rotate{
   width: 400px;
   background-color: white;
   margin-bottom: 20px;
-  border-radius: 5px;
+  border-radius: 13px;
   box-shadow: 7px 7px 7px 2px rgba(0, 0, 0, 0.2);
 }
 
@@ -135,7 +135,7 @@ nav ul li a span.rotate{
   list-style-type: none;
   position: relative !important;
   left: 2vh !important;
- font-family: 'Bitter', serif !important;
+  font-family: 'Bitter', serif !important;
 }
 .close {
   width: 1px !important;
