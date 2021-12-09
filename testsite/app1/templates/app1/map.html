@@ -125,8 +125,20 @@
             document.getElementById(data[i].pk).onclick = function(){ 
                 document.getElementById("mainname").innerHTML = data[i]["fields"].asset_name;
                 document.getElementById("timee").innerHTML = "Время: "+data[i]["fields"].datetime;
-                document.getElementById("sosto").innerHTML = "Общее состояние: <span style="+" color: green !important;"+">"+data[i]["fields"].is_inzone+"</span>";
-                document.getElementById("btst").innerHTML = "Статус заряда: "+data[i]["fields"].battery_status;
+                if(data[i]["fields"].is_inzone===true){ 
+                    document.getElementById("sosto").innerHTML = "Общее состояние: <span style="+"\"color: green !important;\""+">В зоне</span>";
+                }
+                else{ 
+                    document.getElementById("sosto").innerHTML = "Общее состояние: <span style="+"\"color: green !important;\""+">Вне зоны</span>";
+
+                }
+                if(data[i]["fields"].battery_status==="GOOD"){ 
+                    document.getElementById("btst").innerHTML = "Статус заряда: <span style="+"\"color: green !important;\""+">Хороший</span>";
+                }
+                else{ 
+                    document.getElementById("btst").innerHTML = "Статус заряда: <span style="+"\"color: green !important;\""+">Низкий</span>";
+
+                }
                 document.getElementById("latt").innerHTML = "Широта: "+data[i]["fields"].current_lat;
                 document.getElementById("lngg").innerHTML = "Долгота: "+data[i]["fields"].current_lng;
                 document.getElementById("gg2").style.display = "block";

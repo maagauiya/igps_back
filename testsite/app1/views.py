@@ -26,7 +26,12 @@ def index(request):
 
 @login_required(login_url='')
 def checker(request,user,assetid):
+
     devices=serializers.serialize("json",App1.objects.filter(user=assetid))
+    devices2=serializers.serialize("json",Devices.objects.filter(messages_id=1))
+    messages=serializers.serialize("json",Messages.objects.filter(id=1))
+    print(devices2)
+    print(messages)
     context={
         "animals" : devices,
     }
