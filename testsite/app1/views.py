@@ -28,13 +28,7 @@ def index(request):
 
 @login_required(login_url='')
 def checker(request,user,assetid):
-    client=MongoClient("mongodb+srv://maagauiya:magauiyainc@cluster0.f7uie.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-    db = client["igpstest"]
-    collection = db["app1_devices"]
-    cursor=collection.find({})
-    pprint(cursor)
-    for i in cursor:
-        pprint(i)
+    
     devices=serializers.serialize("json",App1.objects.filter(user=assetid))
     context={
         "animals" : devices,
