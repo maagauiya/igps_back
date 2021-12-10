@@ -8,6 +8,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 import json 
 from django.contrib import messages
+from pymongo import MongoClient
+from pprint import pp, pprint
 
 from .models import*
 def index(request):
@@ -26,12 +28,14 @@ def index(request):
 
 @login_required(login_url='')
 def checker(request,user,assetid):
-
+    client=MongoClient("mongodb+srv://maagauiya:magauiyainc@cluster0.f7uie.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+    db = client["igpstest"]
+    collection = db["app1_devices"]
+    cursor=collection.find({})
+    pprint(cursor)
+    for i in cursor:
+        pprint(i)
     devices=serializers.serialize("json",App1.objects.filter(user=assetid))
-    devices2=serializers.serialize("json",Devices.objects.filter(messages_id=1))
-    messages=serializers.serialize("json",Messages.objects.filter(id=1))
-    print(devices2)
-    print(messages)
     context={
         "animals" : devices,
     }

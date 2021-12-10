@@ -129,14 +129,14 @@
                     document.getElementById("sosto").innerHTML = "Общее состояние: <span style="+"\"color: green !important;\""+">В зоне</span>";
                 }
                 else{ 
-                    document.getElementById("sosto").innerHTML = "Общее состояние: <span style="+"\"color: green !important;\""+">Вне зоны</span>";
+                    document.getElementById("sosto").innerHTML = "Общее состояние: <span style="+"\"color: red !important;\""+">Вне зоны</span>";
 
                 }
                 if(data[i]["fields"].battery_status==="GOOD"){ 
                     document.getElementById("btst").innerHTML = "Статус заряда: <span style="+"\"color: green !important;\""+">Хороший</span>";
                 }
                 else{ 
-                    document.getElementById("btst").innerHTML = "Статус заряда: <span style="+"\"color: green !important;\""+">Низкий</span>";
+                    document.getElementById("btst").innerHTML = "Статус заряда: <span style="+"\"color: red !important;\""+">Низкий</span>";
 
                 }
                 document.getElementById("latt").innerHTML = "Широта: "+data[i]["fields"].current_lat;
