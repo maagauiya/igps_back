@@ -35,6 +35,7 @@
    
     <div class="card" id="gg2">
         <h1 class="headerttext" id="mainname">Айгыр</h1>
+        <!-- <a href="#" class="trek">  <img class="logo" src="{% static 'app1/images/history.png' %}" alt="404"></a> -->
         <button type='button' class='close' onclick='$(this).parent().hide();'></button>
         <hr class="linee">
         <ul>
@@ -78,6 +79,16 @@
             var li = document.createElement("li");
             li.appendChild(a);
             ul.appendChild(li); 
+            var a2=document.createElement("a");
+            a2.setAttribute("href","#");
+            a2.setAttribute("class",i);
+            var img=document.createElement("img");
+            img.setAttribute("class","logo");
+            img.setAttribute("src","{% static 'app1/images/history.png' %}");
+            img.setAttribute("alt","404");
+            a2.appendChild(img);
+            var gg2 = document.getElementById("gg2");
+            gg2.appendChild(a2);
             }
         }
             function1()
