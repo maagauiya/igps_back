@@ -81,7 +81,7 @@
             ul.appendChild(li); 
             var a2=document.createElement("a");
             a2.setAttribute("href","#");
-            a2.setAttribute("class",i);
+            a2.setAttribute("id",i + 97);
             var img=document.createElement("img");
             img.setAttribute("class","logo");
             img.setAttribute("src","{% static 'app1/images/history.png' %}");
@@ -133,6 +133,9 @@
             });
             infoWindow.open(map,array[i])
             });
+            document.getElementById(i + 97).onclick = function(){ 
+                console.log(i)
+            }
             document.getElementById(data[i].pk).onclick = function(){ 
                 document.getElementById("mainname").innerHTML = data[i]["fields"].asset_name;
                 document.getElementById("timee").innerHTML = "Время: "+data[i]["fields"].datetime;
