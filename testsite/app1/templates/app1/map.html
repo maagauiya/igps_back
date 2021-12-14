@@ -81,7 +81,7 @@
             ul.appendChild(li); 
             var a2=document.createElement("a");
             a2.setAttribute("href","#");
-            a2.setAttribute("class",i);
+            a2.setAttribute("id",i+100);
             var img=document.createElement("img");
             img.setAttribute("class","logo");
             img.setAttribute("src","{% static 'app1/images/history.png' %}");
@@ -153,9 +153,10 @@
                 document.getElementById("latt").innerHTML = "Широта: "+data[i]["fields"].current_lat;
                 document.getElementById("lngg").innerHTML = "Долгота: "+data[i]["fields"].current_lng;
                 document.getElementById("gg2").style.display = "block";
-
-
-             }
+                document.getElementById(100+3).onclick = function(){ 
+                    console.log(i)
+                }
+            }
         }
     }
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('gg'));
@@ -178,6 +179,9 @@
              $(this).addClass("active").siblings().removeClass("active");
            });
             document.getElementById("gg2").style.display = "none";
+            
+                            
+
     </script>
     <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8gYHQggRVm5HmlLmPy4MQeyQ59B0AVIY&callback=initMap&v=weekly"
