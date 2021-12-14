@@ -163,8 +163,9 @@ nav ul li a span.rotate{
 }
 .logo{ 
   position: absolute !important;
-  top: 0.6vh;
-  right: 5vh;
+  top: 1vh;
+  right: 9.5vh;
+
   height: 4.5vh !important;
   width: 4.5vh !important;
 }
