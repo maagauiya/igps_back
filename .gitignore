@@ -1,0 +1,4 @@
+.DS_Store
+venv/
+db.sqlite3
+trash.html

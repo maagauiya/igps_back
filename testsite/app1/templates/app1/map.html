@@ -1,0 +1,188 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" sizes="16x16" href="{% static 'app1/images/favicon.ico'%}"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="{% static 'app1/css/navbar.css'%}"/>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Bitter&display=swap" rel="stylesheet">
+    <title>Map</title>
+    <style>
+        #br1{ 
+            content: "";
+            margin: 0em;
+            display: block;
+            font-size: 20%
+        }
+        #map{
+            height: 100%;
+            width: 100%;
+        }
+        body, html {
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+   
+    <div class="card" id="gg2">
+        <h1 class="headerttext" id="mainname">Айгыр</h1>
+        <!-- <a href="#" class="trek">  <img class="logo" src="{% static 'app1/images/history.png' %}" alt="404"></a> -->
+        <button type='button' class='close' onclick='$(this).parent().hide();'></button>
+        <hr class="linee">
+        <ul>
+            <li class="ttext" id="timee" >Время:</li>
+            <li class="ttext" id="sosto">Общее состояние:</li>
+            <li class="ttext" id="btst">Статус заряда:</li>
+            <li class="ttext" id="latt">Широта:</li>
+            <li class="ttext" id="lngg">Долгота:</li>
+          </ul>
+    </div>
+    <div id="gg">
+        <div class="btn">
+            <span class="fas fa-bars"></span>
+         </div>
+         <nav class="sidebar">
+            <ul>
+                <li>
+                    <a href="#" class="feat-btn">Активы
+                    <span class="fas fa-caret-down first"></span>
+                    </a>
+                    <ul class="feat-show" id="uu2">
+                    </ul>
+                 </li>
+               <li><a href="#">Настройки</a></li>
+               <li><a href="#">Уведомления</a></li>
+               <li><a href="#">Выйти</a></li>
+            </ul>
+         </nav>
+    </div>
+    <div id="map"></div>
+    <script>
+        var data = eval(JSON.parse("{{ animals | escapejs }}"));
+         const array2=[];
+         function function1() {
+            for (let i = 0; i <data.length; i++){ 
+            var ul = document.getElementById("uu2");
+            var a = document.createElement("a");
+            a.appendChild(document.createTextNode(data[i]["fields"].asset_name));
+            a.setAttribute("href", "#")
+            a.setAttribute("id", data[i].pk)
+            var li = document.createElement("li");
+            li.appendChild(a);
+            ul.appendChild(li); 
+            var a2=document.createElement("a");
+            a2.setAttribute("href","#");
+            a2.setAttribute("class",i);
+            var img=document.createElement("img");
+            img.setAttribute("class","logo");
+            img.setAttribute("src","{% static 'app1/images/history.png' %}");
+            img.setAttribute("alt","404");
+            a2.appendChild(img);
+            var gg2 = document.getElementById("gg2");
+            gg2.appendChild(a2);
+            }
+        }
+            function1()
+        function initMap() {
+            var options = {
+                zoom: 10,
+                center: {
+                    lat: 49.838322, lng: 73.115601
+                },
+                streetViewControl: false, 
+                mapTypeId: "satellite",
+                mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.TOP_RIGHT,
+                
+    }
+            }
+            var map = new google.maps.Map(document.getElementById('map'), options);
+            const array=[];
+            
+            addMarker(); 
+        function addMarker() {
+            for (let i = 0; i < data.length; i++) {
+                var marker = new google.maps.Marker({
+                position: {
+                    lat: parseInt(data[i]["fields"].current_lat), lng: parseInt(data[i]["fields"].current_lng)
+                },
+                map: map,
+                icon: {
+                    url: 'https://img.icons8.com/color/96/000000/horses-sign.png',
+                    scaledSize: new window.google.maps.Size(70, 70)}
+                }) 
+                array.push(marker);
+                array2.push(data[i]);
+            }
+            for (let i = 0; i <data.length; i++){ 
+            array[i].addListener('click', function() {
+                var infoWindow = new google.maps.InfoWindow({
+                content: "<p>Имя трекера:" + array2[i]["fields"].asset_name +" </p>" + "<br id='br1'> <p>Статус батареи:" + 
+                    array2[i]["fields"].battery_status+" </p>" + "<br id='br1'><p>Даты и время:" + 
+                        array2[i]["fields"].datetime + " </p>"
+            });
+            infoWindow.open(map,array[i])
+            });
+            document.getElementById(data[i].pk).onclick = function(){ 
+                document.getElementById("mainname").innerHTML = data[i]["fields"].asset_name;
+                document.getElementById("timee").innerHTML = "Время: "+data[i]["fields"].datetime;
+                if(data[i]["fields"].is_inzone===true){ 
+                    document.getElementById("sosto").innerHTML = "Общее состояние: <span style="+"\"color: green !important;\""+">В зоне</span>";
+                }
+                else{ 
+                    document.getElementById("sosto").innerHTML = "Общее состояние: <span style="+"\"color: red !important;\""+">Вне зоны</span>";
+
+                }
+                if(data[i]["fields"].battery_status==="GOOD"){ 
+                    document.getElementById("btst").innerHTML = "Статус заряда: <span style="+"\"color: green !important;\""+">Хороший</span>";
+                }
+                else{ 
+                    document.getElementById("btst").innerHTML = "Статус заряда: <span style="+"\"color: red !important;\""+">Низкий</span>";
+
+                }
+                document.getElementById("latt").innerHTML = "Широта: "+data[i]["fields"].current_lat;
+                document.getElementById("lngg").innerHTML = "Долгота: "+data[i]["fields"].current_lng;
+                document.getElementById("gg2").style.display = "block";
+
+
+             }
+        }
+    }
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('gg'));
+        map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('gg2'));
+
+}
+        $('.btn').click(function(){
+           $(this).toggleClass("click");
+           $('.sidebar').toggleClass("show");
+         });
+           $('.feat-btn').click(function(){
+             $('nav ul .feat-show').toggleClass("show");
+             $('nav ul .first').toggleClass("rotate");
+           });
+           $('.serv-btn').click(function(){
+             $('nav ul .serv-show').toggleClass("show1");
+             $('nav ul .second').toggleClass("rotate");
+           });
+           $('nav ul li').click(function(){
+             $(this).addClass("active").siblings().removeClass("active");
+           });
+            document.getElementById("gg2").style.display = "none";
+    </script>
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8gYHQggRVm5HmlLmPy4MQeyQ59B0AVIY&callback=initMap&v=weekly"
+    async
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
