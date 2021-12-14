@@ -67,6 +67,8 @@
     </div>
     <div id="map"></div>
     <script>
+        var state=false;
+        const flightPlanCoordinates = eval("{{coordinates | escapejs}}");
         var data = eval(JSON.parse("{{ animals | escapejs }}"));
          const array2=[];
          function function1() {
@@ -80,8 +82,8 @@
             li.appendChild(a);
             ul.appendChild(li); 
             var a2=document.createElement("a");
-            a2.setAttribute("href","#");
-            a2.setAttribute("id",i + 97);
+            a2.setAttribute("href","#")
+            a2.setAttribute("id",i+100);
             var img=document.createElement("img");
             img.setAttribute("class","logo");
             img.setAttribute("src","{% static 'app1/images/history.png' %}");
@@ -125,18 +127,27 @@
                 array2.push(data[i]);
             }
             for (let i = 0; i <data.length; i++){ 
+
+            var prev_infowindow =false; 
             array[i].addListener('click', function() {
                 var infoWindow = new google.maps.InfoWindow({
                 content: "<p>Имя трекера:" + array2[i]["fields"].asset_name +" </p>" + "<br id='br1'> <p>Статус батареи:" + 
                     array2[i]["fields"].battery_status+" </p>" + "<br id='br1'><p>Даты и время:" + 
                         array2[i]["fields"].datetime + " </p>"
             });
-            infoWindow.open(map,array[i])
+            
+
+            if( prev_infowindow ) {
+                    prev_infowindow.close();
+                }     
+                infoWindow.open(map, array[i]);
+                prev_infowindow = infoWindow;
             });
-            document.getElementById(i + 97).onclick = function(){ 
-                console.log(i)
-            }
-            document.getElementById(data[i].pk).onclick = function(){ 
+            
+            document.getElementById(data[i].pk).addEventListener("click", function() {
+
+                
+
                 document.getElementById("mainname").innerHTML = data[i]["fields"].asset_name;
                 document.getElementById("timee").innerHTML = "Время: "+data[i]["fields"].datetime;
                 if(data[i]["fields"].is_inzone===true){ 
@@ -156,10 +167,36 @@
                 document.getElementById("latt").innerHTML = "Широта: "+data[i]["fields"].current_lat;
                 document.getElementById("lngg").innerHTML = "Долгота: "+data[i]["fields"].current_lng;
                 document.getElementById("gg2").style.display = "block";
-
-
-             }
-        }
+                document.getElementById(100+3).onclick = function(){ 
+                    if(state===true){
+                        flightPath.setMap(null);
+                        markSTART.setMap(null);
+                        markEND.setMap(null);
+                    }
+                flightPath = new google.maps.Polyline({
+                    path: flightPlanCoordinates[i],
+                    geodesic: true,
+                    strokeColor: "#000000",
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2,
+                });
+                map.setZoom(15)
+                map.setCenter(flightPlanCoordinates[i][flightPlanCoordinates[i].length - 1]);
+                markSTART = new google.maps.Marker({
+                    position: flightPlanCoordinates[i][0],
+                    map: map,
+                    icon: "https://img.icons8.com/fluency/48/000000/marker-a.png"
+                });
+                markEND = new google.maps.Marker({
+                    position: flightPlanCoordinates[i][flightPlanCoordinates[i].length - 1],
+                    map: map,
+                    icon: "https://img.icons8.com/fluency/48/000000/marker-b.png"
+                });
+                flightPath.setMap(map);
+                state=true;
+                }
+            }
+        )}
     }
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('gg'));
         map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('gg2'));
@@ -181,6 +218,9 @@
              $(this).addClass("active").siblings().removeClass("active");
            });
             document.getElementById("gg2").style.display = "none";
+            
+                            
+
     </script>
     <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8gYHQggRVm5HmlLmPy4MQeyQ59B0AVIY&callback=initMap&v=weekly"
