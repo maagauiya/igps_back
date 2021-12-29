@@ -81,16 +81,7 @@
             var li = document.createElement("li");
             li.appendChild(a);
             ul.appendChild(li); 
-            var a2=document.createElement("a");
-            a2.setAttribute("href","#")
-            a2.setAttribute("id",i+100);
-            var img=document.createElement("img");
-            img.setAttribute("class","logo");
-            img.setAttribute("src","{% static 'app1/images/history.png' %}");
-            img.setAttribute("alt","404");
-            a2.appendChild(img);
             var gg2 = document.getElementById("gg2");
-            gg2.appendChild(a2);
             }
         }
             function1()
@@ -116,7 +107,7 @@
             for (let i = 0; i < data.length; i++) {
                 var marker = new google.maps.Marker({
                 position: {
-                    lat: parseInt(data[i]["fields"].current_lat), lng: parseInt(data[i]["fields"].current_lng)
+                    lat: parseFloat(data[i]["fields"].current_lat), lng: parseFloat(data[i]["fields"].current_lng)
                 },
                 map: map,
                 icon: {
@@ -164,10 +155,22 @@
                     document.getElementById("btst").innerHTML = "Статус заряда: <span style="+"\"color: red !important;\""+">Низкий</span>";
 
                 }
+                if(!document.getElementById(100+i)){
+                var a2= document.createElement("a");
+                a2.setAttribute("href","#");
+                a2.setAttribute("id",100+i);
+                var img = document.createElement("img");
+                img.setAttribute("class","logo");
+                img.setAttribute("src","{% static 'app1/images/history.png' %}");
+                img.setAttribute("alt","404");
+                a2.appendChild(img);
+                document.getElementById("gg2").appendChild(a2);
+                }
                 document.getElementById("latt").innerHTML = "Широта: "+data[i]["fields"].current_lat;
                 document.getElementById("lngg").innerHTML = "Долгота: "+data[i]["fields"].current_lng;
                 document.getElementById("gg2").style.display = "block";
-                document.getElementById(100+3).onclick = function(){ 
+                document.getElementById(100+i).onclick = function(){ 
+                    console.log(i)
                     if(state===true){
                         flightPath.setMap(null);
                         markSTART.setMap(null);
@@ -195,7 +198,7 @@
                 flightPath.setMap(map);
                 state=true;
                 }
-            }
+                }
         )}
     }
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('gg'));

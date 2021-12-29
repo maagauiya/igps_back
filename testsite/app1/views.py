@@ -6,11 +6,14 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import check_password
 import json 
 from django.contrib import messages
 from pymongo import MongoClient
 from pprint import pp, pprint
-
+from django.contrib.auth.models import User
+from pymongo import MongoClient
+from django.contrib.auth import get_user_model 
 from .models import*
 def index(request):
     if request.method=='POST':
@@ -28,6 +31,34 @@ def index(request):
 
 @login_required(login_url='')
 def checker(request,user,assetid):
+    
+
+
+        
+    # with open("/Users/maagauiya/Desktop/self_study/djangoo — копия/testsite/app1/asset.json") as jsonFile:
+    #     jsonObject = json.load(jsonFile)
+    #     for i in range(len(jsonObject)):
+    #         print(i)
+    #         assetss=App1()
+    #         assetss.id=i
+    #         assetss.user=jsonObject[i]['user']
+    #         assetss.device=jsonObject[i]['device']
+    #         assetss.asset_name=jsonObject[i]['asset_name']
+    #         assetss.current_lat=jsonObject[i]['current_lat']
+    #         assetss.current_lng=jsonObject[i]['current_lng']
+    #         assetss.battery_status=jsonObject[i]['battery_status']
+    #         assetss.is_inzone=jsonObject[i]['is_inzone']
+    #         assetss.datetime=jsonObject[i]['datetime']
+    #         assetss.save()
+
+
+
+
+
+
+
+
+
 
     def decodeStPayLat(strp):
         lat = strp[4:10]
@@ -51,17 +82,18 @@ def checker(request,user,assetid):
     collection = db["app1_app1"]
     userr=0
 
-    cursor=collection.find({ "user": { "$exists": "true" },"id":1 })
-    for doc in cursor:
-        userr=doc["user"]
-    userr=158
+    # cursor=collection.find({ "user": { "$exists": "true" },"id":assetid })
+    # for doc in cursor:
+    #     userr=doc["user"]
     collection = db["device"]
     esn=[]
-    cursor=collection.find({ "messenger_id": { "$exists": "true" },"user":userr })
+    # print(assetid)
+    # print(userr)
+    cursor=collection.find({ "messenger_id": { "$exists": "true" },"user":assetid })
     for doc in cursor:
         esn.append(doc["messenger_id"])
 
-
+    print(esn)
     collection = db["devices"]
     messages=[]
     for i in range(len(esn)):
@@ -74,14 +106,13 @@ def checker(request,user,assetid):
     for i in range(len(messages)):
         num = len(messages[i])
         coordinates.append([{'lat':decodeStPayLat(messages[i][k]["payload"]),'lng':decodeStPayLng(messages[i][k]["payload"])} for k in range(num-11, num - 1)])
-        print(i)
+    devices=serializers.serialize("json",App1.objects.filter(user=int(assetid)))
     
-    devices=serializers.serialize("json",App1.objects.filter(user=assetid))
     context={
         "animals" : devices,
         "coordinates" : coordinates
     }
-
+    # print(coordinates)
     if user is not None:
         return render(request,'app1/map.html', context=context,)
 
