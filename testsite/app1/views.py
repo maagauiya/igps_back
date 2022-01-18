@@ -6,14 +6,14 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.hashers import check_password
 import json 
 from django.contrib import messages
-from pymongo import MongoClient
-from pprint import pp, pprint
 from django.contrib.auth.models import User
 from pymongo import MongoClient
-from django.contrib.auth import get_user_model 
+from pprint import pp, pprint
+from sshtunnel import SSHTunnelForwarder
+import pandas as pd
+
 from .models import*
 def index(request):
     if request.method=='POST':
@@ -31,34 +31,6 @@ def index(request):
 
 @login_required(login_url='')
 def checker(request,user,assetid):
-    
-
-
-        
-    # with open("/Users/maagauiya/Desktop/self_study/djangoo — копия/testsite/app1/asset.json") as jsonFile:
-    #     jsonObject = json.load(jsonFile)
-    #     for i in range(len(jsonObject)):
-    #         print(i)
-    #         assetss=App1()
-    #         assetss.id=i
-    #         assetss.user=jsonObject[i]['user']
-    #         assetss.device=jsonObject[i]['device']
-    #         assetss.asset_name=jsonObject[i]['asset_name']
-    #         assetss.current_lat=jsonObject[i]['current_lat']
-    #         assetss.current_lng=jsonObject[i]['current_lng']
-    #         assetss.battery_status=jsonObject[i]['battery_status']
-    #         assetss.is_inzone=jsonObject[i]['is_inzone']
-    #         assetss.datetime=jsonObject[i]['datetime']
-    #         assetss.save()
-
-
-
-
-
-
-
-
-
 
     def decodeStPayLat(strp):
         lat = strp[4:10]
@@ -77,48 +49,110 @@ def checker(request,user,assetid):
             lngtt = -longtt
         return -lngtt
 
+    MONGO_HOST = "46.101.236.239"
+    MONGO_DB = "sttechdb"
+    MONGO_USER = "bekald"
+    MONGO_PASS = "dndrBPVmTRr8"
+
+    server = SSHTunnelForwarder(
+        (MONGO_HOST, 1220),
+        ssh_username=MONGO_USER,
+        ssh_password=MONGO_PASS,
+        remote_bind_address=('127.0.0.1', 27017)
+    )
+
+    server.start()
+
+    client2 = MongoClient('127.0.0.1', server.local_bind_port)
+    db2 = client2[MONGO_DB]
+    #collection = db2[]
+
+        # print(assetid)
+        # print(userr)
+    
+    
+
+    
+
     client=MongoClient("mongodb+srv://maagauiya:loopcool@cluster0.f7uie.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     db = client["igpstest"]
     collection = db["app1_app1"]
     userr=0
+    
+    cursor=collection.find({ "user": assetid,"id": { "$exists": "true" }})
+    
+    for doc in cursor:
+        userr=doc["id"]
 
-    # cursor=collection.find({ "user": { "$exists": "true" },"id":assetid })
-    # for doc in cursor:
-    #     userr=doc["user"]
-    collection = db["device"]
+    collection = db2["device"]
     esn=[]
-    # print(assetid)
-    # print(userr)
     cursor=collection.find({ "messenger_id": { "$exists": "true" },"user":assetid })
     for doc in cursor:
         esn.append(doc["messenger_id"])
 
-    print(esn)
-    collection = db["devices"]
+
+    collection = db2["devices"]
     messages=[]
     for i in range(len(esn)):
         cursor=collection.find({ "messages": { "$exists": "true" },"esn":esn[i] })
         for doc in cursor:
             messages.append(doc["messages"])
-
-    #pprint(messages)
+    
     coordinates = []
+    server.stop()
     for i in range(len(messages)):
         num = len(messages[i])
         coordinates.append([{'lat':decodeStPayLat(messages[i][k]["payload"]),'lng':decodeStPayLng(messages[i][k]["payload"])} for k in range(num-11, num - 1)])
-    devices=serializers.serialize("json",App1.objects.filter(user=int(assetid)))
     
+    devices=serializers.serialize("json",App1.objects.filter(user=assetid))
     context={
         "animals" : devices,
         "coordinates" : coordinates
     }
-    # print(coordinates)
+    
+
     if user is not None:
         return render(request,'app1/map.html', context=context,)
 
 
 def pageNotFound(request,exception):
     return HttpResponseNotFound('NOT FOUND 404')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
