@@ -1,9 +1,9 @@
 import json
 from django.core import serializers
 from django.http.response import Http404, HttpResponseNotFound, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login ,logout
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 import json 
@@ -13,6 +13,7 @@ from pymongo import MongoClient
 from pprint import pp, pprint
 from sshtunnel import SSHTunnelForwarder
 import pandas as pd
+import time
 
 from .models import*
 def index(request):
@@ -22,7 +23,7 @@ def index(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return checker(request,user,user.pk)
+            return redirect('map/{}'.format(user.pk))
         else:
             messages.error(request,'Введен неверный логин или пароль')
             return render(request,'app1/signin.html')
@@ -30,7 +31,15 @@ def index(request):
         return render(request,'app1/signin.html')
 
 @login_required(login_url='')
-def checker(request,user,assetid):
+def checker(request,assetid,*args, **kwargs):
+     
+    if assetid != request.user.id:
+        return redirect('/map/{}'.format(request.user.id))
+    
+
+    if request.POST.get('logout'):
+        logout(request)
+        return redirect('/')
 
     def decodeStPayLat(strp):
         lat = strp[4:10]
@@ -111,12 +120,19 @@ def checker(request,user,assetid):
     }
     
 
-    if user is not None:
-        return render(request,'app1/map.html', context=context,)
+    
+    return render(request,'app1/map.html', context=context,)
+
+
+    
+
 
 
 def pageNotFound(request,exception):
-    return HttpResponseNotFound('NOT FOUND 404')
+    context = {}
+    response = render(request, "app1/error.html", context=context)
+    response.status_code = 404
+    return response
 
 
 

@@ -120,6 +120,7 @@ nav ul li a span.rotate{
   margin-bottom: 20px;
   border-radius: 13px;
   box-shadow: 7px 7px 7px 2px rgba(0, 0, 0, 0.2);
+  justify-content: right !important;
 }
 
 .headerttext{ 
@@ -137,11 +138,11 @@ nav ul li a span.rotate{
   left: 2vh !important;
   font-family: 'Bitter', serif !important;
 }
-.close {
+/* .close {
   width: 1px !important;
   position:relative;
-  left: 46vh;
-  bottom: 5vh;
+  float: right !important;
+
   opacity: 0.3;
 }
 .close:hover {
@@ -152,7 +153,7 @@ nav ul li a span.rotate{
   left: 15px;
   content: ' ';
   height: 33px;
-  width: 2px;
+  width: 3px;
   background-color: #333;
 }
 .close:before {
@@ -160,11 +161,45 @@ nav ul li a span.rotate{
 }
 .close:after {
   transform: rotate(-45deg);
-}
+} */
 .logo{ 
-  position: absolute !important;
-  top: 1vh;
-  right: 9.5vh;
+  /* position: absolute !important; */
+  display: inline !important;
+  position: relative !important;
+  /* top: 1vh;
+  right: 9.5vh; */
   height: 4.5vh !important;
   width: 4.5vh !important;
+  float: right !important;
+  z-index: 99;
+  opacity: 0.5 !important;
+}
+
+.closing123{
+  display: inline;
+  position: relative !important;
+
+  height: 4.5vh !important;
+  width: 4.5vh !important;
+  background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer; 
+	outline: inherit;
+  opacity: 0.5;
+  float: right !important;
+  z-index: 99;
+}
+
+.logo:hover{
+  opacity: 1 !important;
+  cursor: pointer;
+}
+
+.closing123:hover {
+  opacity: 1;
+
+
 }
