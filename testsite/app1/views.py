@@ -12,11 +12,13 @@ from django.contrib.auth.models import User
 from pymongo import MongoClient
 from pprint import pp, pprint
 from sshtunnel import SSHTunnelForwarder
+from bson.json_util import dumps, loads
 import pandas as pd
 import time
 
 from .models import*
 def index(request):
+    
     if request.method=='POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -33,6 +35,7 @@ def index(request):
 @login_required(login_url='')
 def checker(request,assetid,*args, **kwargs):
      
+
     if assetid != request.user.id:
         return redirect('/map/{}'.format(request.user.id))
     
@@ -83,9 +86,9 @@ def checker(request,assetid,*args, **kwargs):
 
     
 
-    client=MongoClient("mongodb+srv://maagauiya:loopcool@cluster0.f7uie.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-    db = client["igpstest"]
-    collection = db["app1_app1"]
+    # client=MongoClient("mongodb+srv://maagauiya:loopcool@cluster0.f7uie.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+    # db = client["igpstest"]
+    collection = db2["asset"]
     userr=0
     
     cursor=collection.find({ "user": assetid,"id": { "$exists": "true" }})
@@ -108,19 +111,35 @@ def checker(request,assetid,*args, **kwargs):
             messages.append(doc["messages"])
     
     coordinates = []
-    server.stop()
+ 
     for i in range(len(messages)):
         num = len(messages[i])
-        coordinates.append([{'lat':decodeStPayLat(messages[i][k]["payload"]),'lng':decodeStPayLng(messages[i][k]["payload"])} for k in range(num-11, num - 1)])
-    
-    devices=serializers.serialize("json",App1.objects.filter(user=assetid))
-    context={
-        "animals" : devices,
-        "coordinates" : coordinates
-    }
-    
+        if(num>=10):
+            coordinates.append([{'lat':decodeStPayLat(messages[i][k]["payload"]),'lng':decodeStPayLng(messages[i][k]["payload"])} for k in range(num-11, num - 1)])
+        else:
+            coordinates.append([{'lat':decodeStPayLat(messages[i][k]["payload"]),'lng':decodeStPayLng(messages[i][k]["payload"])} for k in range(0, num)])
 
     
+    # devices=serializers.serialize("json",App1.objects.filter(user=assetid))
+    # context={
+    #     "animals" : devices,
+    #     "coordinates" : coordinates
+    # }
+    # print(type(devices))
+
+
+    collection=db2["asset"]
+    cursor = collection.find(({ "user": assetid}))
+    cursor = dumps(cursor)
+    print(cursor)
+    print(type(cursor))
+    context={
+        "animals" : cursor,
+        "coordinates" : coordinates
+    }
+
+
+    server.stop()
     return render(request,'app1/map.html', context=context,)
 
 

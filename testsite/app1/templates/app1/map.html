@@ -96,9 +96,9 @@
             for (let i = 0; i <data.length; i++){ 
             var ul = document.getElementById("uu2");
             var a = document.createElement("a");
-            a.appendChild(document.createTextNode(data[i]["fields"].asset_name));
+            a.appendChild(document.createTextNode(data[i].asset_name));
             a.setAttribute("href", "#")
-            a.setAttribute("id", data[i].pk)
+            a.setAttribute("id",data[i]._id)
             var li = document.createElement("li");
             li.appendChild(a);
             ul.appendChild(li); 
@@ -110,7 +110,7 @@
             var options = {
                 zoom: 10,
                 center: {
-                    lat: parseFloat(data[0]["fields"].current_lat), lng: parseFloat(data[0]["fields"].current_lng)
+                    lat: parseFloat(data[0].current_lat), lng: parseFloat(data[0].current_lng)
                 },
                 streetViewControl: false, 
                 mapTypeId: "satellite",
@@ -128,7 +128,7 @@
             for (let i = 0; i < data.length; i++) {
                 var marker = new google.maps.Marker({
                 position: {
-                    lat: parseFloat(data[i]["fields"].current_lat), lng: parseFloat(data[i]["fields"].current_lng)
+                    lat: parseFloat(data[i].current_lat), lng: parseFloat(data[i].current_lng)
                 },
                 map: map,
                 icon: {
@@ -142,17 +142,17 @@
 
             var prev_infowindow =false; 
             array[i].addListener('click', function() {
-                if (array2[i]["fields"].battery_status==="GOOD"){
+                if (array2[i].battery_status==="GOOD"){
                     var infoWindow = new google.maps.InfoWindow({
-                content: "<p>Имя трекера: " + array2[i]["fields"].asset_name +" </p>" + "<br id='br1'> <p>Статус батареи: " + 
+                content: "<p>Имя трекера: " + array2[i].asset_name +" </p>" + "<br id='br1'> <p>Статус батареи: " + 
                     "<span style="+"\"color: green !important;\""+">Хороший</span>"+" </p>" + "<br id='br1'><p>Даты и время: " + 
-                        array2[i]["fields"].datetime + " </p>"
+                        array2[i].datetime + " </p>"
             });}
                 else{ 
                     var infoWindow = new google.maps.InfoWindow({
-                content: "<p>Имя трекера: " + array2[i]["fields"].asset_name +" </p>" + "<br id='br1'> <p>Статус батареи: " + 
+                content: "<p>Имя трекера: " + array2[i].asset_name +" </p>" + "<br id='br1'> <p>Статус батареи: " + 
                     "<span style="+"\"color: red !important;\""+">Низкий</span>"+" </p>" + "<br id='br1'><p>Даты и время: " + 
-                        array2[i]["fields"].datetime + " </p>"
+                        array2[i].datetime + " </p>"
             });
                 }
             
@@ -164,20 +164,20 @@
                 prev_infowindow = infoWindow;
             });
             
-            document.getElementById(data[i].pk).addEventListener("click", function() {
+            document.getElementById(data[i]._id).addEventListener("click", function() {
 
                 
 
-                document.getElementById("mainname").innerHTML = data[i]["fields"].asset_name;
-                document.getElementById("timee").innerHTML = "Время: "+data[i]["fields"].datetime;
-                if(data[i]["fields"].is_inzone===true){ 
+                document.getElementById("mainname").innerHTML = data[i].asset_name;
+                document.getElementById("timee").innerHTML = "Время: "+data[i].datetime;
+                if(data[i].is_inzone===true){ 
                     document.getElementById("sosto").innerHTML = "Общее состояние: <span style="+"\"color: green !important;\""+">В зоне</span>";
                 }
                 else{ 
                     document.getElementById("sosto").innerHTML = "Общее состояние: <span style="+"\"color: red !important;\""+">Вне зоны</span>";
 
                 }
-                if(data[i]["fields"].battery_status==="GOOD"){ 
+                if(data[i].battery_status==="GOOD"){ 
                     document.getElementById("btst").innerHTML = "Статус заряда: <span style="+"\"color: green !important;\""+">Хороший</span>";
                 }
                 else{ 
@@ -201,8 +201,8 @@
                 // a2.appendChild(img);
                 // document.getElementById("gg2").appendChild(a2);
                 }
-                document.getElementById("latt").innerHTML = "Широта: "+data[i]["fields"].current_lat;
-                document.getElementById("lngg").innerHTML = "Долгота: "+data[i]["fields"].current_lng;
+                document.getElementById("latt").innerHTML = "Широта: "+data[i].current_lat;
+                document.getElementById("lngg").innerHTML = "Долгота: "+data[i].current_lng;
                 document.getElementById("gg2").style.display = "block";
                 document.getElementById(100+i).onclick = function(){ 
                     // console.log(i)
