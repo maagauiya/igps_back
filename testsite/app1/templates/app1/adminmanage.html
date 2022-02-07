@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style>
+      html, body, .container, .row {
+        height:100%;
+      } 
+    </style>
+  </head>
+<body>
+    <div class="container">
+        <div class="row">
+          <div class="col" style="height: 100% !important; border-right: 1px solid black">
+            <form  method="POST" >
+              {% csrf_token %}
+            <p class="text-center fs-2">Registration</p>
+            <div class="input-group input-group-sm mb-3">
+              <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Full name" name="name">
+            </div>
+            <div class="input-group input-group-sm mb-3">
+              <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Username" name="username">
+            </div>
+            <div class="input-group input-group-sm mb-3">
+              <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Password" name="password">
+            </div>
+            <div class="input-group input-group-sm mb-3">
+              <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="email" name="email">
+            </div>
+            <div class="input-group input-group-sm mb-3">
+              <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Mobile" name="mobile">
+            </div>
+            
+            <button type="submit" name="reguser" class="btn btn-primary">Registration</button>
+            </form>
+          </div>
+
+          <div class="col" style="border-right: 1px solid black">
+            <form  method="POST" >
+              {% csrf_token %}
+            <p class="text-center fs-2">Search</p>
+            <div class="input-group mb-3 input-group-sm">
+             
+               <input type="text" class="form-control" placeholder="Username" name="username" aria-label="username" aria-describedby="button-addon2">
+               <input type="submit" class="btn btn-outline-secondary" name="search" value="Поиск"  >
+
+            </div>
+            {% for message in users %}
+             <span><a class="link-secondary" href="">{{message.username}}</a></span>
+            
+            {% endfor %}
+            
+          </form>
+          </div>
+
+          <div class="col">
+            <form  method="POST" >
+              {% csrf_token %}
+            <p class="text-center fs-2">Add devices</p>
+            <div class="input-group input-group-sm mb-3">
+              <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Username" name="usern">
+            </div>
+            <div class="input-group input-group-sm mb-3">
+              <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="ESN" name="esn">
+            </div>
+            
+            <button type="submit" name="regdev" class="btn btn-primary">Add device</button>
+          </div>
+        </form>
+        </div>
+      </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</html>

@@ -1,4 +1,7 @@
 import json
+from re import search
+from sqlite3 import Cursor
+import requests
 from django.core import serializers
 from django.http.response import Http404, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -17,6 +20,22 @@ import pandas as pd
 import time
 
 from .models import*
+MONGO_HOST = "46.101.236.239"
+MONGO_DB = "sttechdb"
+MONGO_USER = "bekald"
+MONGO_PASS = "dndrBPVmTRr8"
+
+server = SSHTunnelForwarder(
+    (MONGO_HOST, 1220),
+        ssh_username=MONGO_USER,
+        ssh_password=MONGO_PASS,
+        remote_bind_address=('127.0.0.1', 27017)
+    )
+
+server.start()
+
+client2 = MongoClient('127.0.0.1', server.local_bind_port)
+db2 = client2[MONGO_DB]
 def index(request):
     
     if request.method=='POST':
@@ -25,7 +44,10 @@ def index(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('map/{}'.format(user.pk))
+            if request.user.is_superuser == True:
+                return redirect('manage/')
+            else:
+                return redirect('map/{}'.format(user.pk))
         else:
             messages.error(request,'Введен неверный логин или пароль')
             return render(request,'app1/signin.html')
@@ -61,22 +83,7 @@ def checker(request,assetid,*args, **kwargs):
             lngtt = -longtt
         return -lngtt
 
-    MONGO_HOST = "46.101.236.239"
-    MONGO_DB = "sttechdb"
-    MONGO_USER = "bekald"
-    MONGO_PASS = "dndrBPVmTRr8"
 
-    server = SSHTunnelForwarder(
-        (MONGO_HOST, 1220),
-        ssh_username=MONGO_USER,
-        ssh_password=MONGO_PASS,
-        remote_bind_address=('127.0.0.1', 27017)
-    )
-
-    server.start()
-
-    client2 = MongoClient('127.0.0.1', server.local_bind_port)
-    db2 = client2[MONGO_DB]
     #collection = db2[]
 
         # print(assetid)
@@ -142,7 +149,66 @@ def checker(request,assetid,*args, **kwargs):
     server.stop()
     return render(request,'app1/map.html', context=context,)
 
+def manage(request):
+    headers =  {
+                'Content-Type': 'application/json'
+            }
+    if request.user.is_superuser == True:
+        if request.POST.get('reguser'):
+            url = "46.101.236.239:5001/reg"
+            data = {
+                "username":request.POST.get('username'),
+                "email":request.POST.get('email'),
+                "password":request.POST.get('password'),
+                "name":request.POST.get('name'),
+                "mobile":request.POST.get('mobile'),
+                "lang":"ru",
 
+            }
+            connect = requests.post(url, headers=headers,json = data)
+            print(connect)
+            collection=db2['new_users']
+            cursor=collection.find({"username":request.POST.get('username')})
+            for doc in cursor:
+                user = User.objects.create_user(
+                        id=doc['_id'],
+                        username=doc['username'],
+                        email=doc['email'],
+                        password=request.POST.get('password'),
+                        is_superuser=False,
+                        first_name=request.POST.get('name'),
+                        )
+
+                user.save()
+                break
+        if request.POST.get('regdev'):
+            url = "46.101.236.239:5001/reg_smartone"
+            collection=db2['new_users']
+            cursor=collection.find({"username":"username"})
+            idd=None
+            for i in cursor:
+                idd=i['_id']
+            data = {
+                "userid":idd,
+                "esn":request.POST.get('esn')
+            }
+            connect = requests.post(url, headers=headers,json = data)
+            print(connect)
+        ##
+        
+        if request.POST.get('search'):
+            username=request.POST.get('username')
+            users=User.objects.filter(username=username)
+            context={ 
+                "users":users
+            }
+            return render(request,'app1/adminmanage.html',context=context)
+
+
+        return render(request,'app1/adminmanage.html',)
+        
+    else:
+        return pageNotFound(request,exception=404)
     
 
 
