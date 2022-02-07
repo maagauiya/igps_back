@@ -13,7 +13,6 @@ import json
 from django.contrib import messages
 from django.contrib.auth.models import User
 from pymongo import MongoClient
-from pprint import pp, pprint
 from sshtunnel import SSHTunnelForwarder
 from bson.json_util import dumps, loads
 import pandas as pd

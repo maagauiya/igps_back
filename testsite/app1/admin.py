@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import*
 from pymongo import MongoClient
-from pprint import pp, pprint
 from sshtunnel import SSHTunnelForwarder
 import pandas as pd
 from django.contrib import admin
@@ -16,7 +15,6 @@ from sqlite3 import Cursor
 import pandas as pd
 from sshtunnel import SSHTunnelForwarder
 from pymongo import MongoClient
-import pprint
 
 # class ImportAdmin(DjangoObjectActions, admin.ModelAdmin):
 #     def Update(modeladmin, request, queryset):
