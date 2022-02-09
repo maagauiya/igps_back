@@ -62,9 +62,15 @@
             <p class="text-center fs-2">Add devices</p>
             <div class="input-group input-group-sm mb-3">
               <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Username" name="usern">
+                <button style="border: 1px solid black;" type="button" class="btn btn-success" id="plus">+</button>
+            <button style="border: 1px solid black;" type="button" class="btn btn-danger" id="minus">-</button>
             </div>
             <div class="input-group input-group-sm mb-3">
-              <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="ESN" name="esn">
+              <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="ESN" name="0">
+            </div>
+                
+                <div id="jello">
+
             </div>
             <input type="submit" class="btn btn-primary" name="regdev" value="Add device">
           </div>
@@ -73,4 +79,32 @@
       </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script>
+  let i = 0
+  
+document.getElementById("plus").addEventListener("click", function() {
+  i = i + 1
+  var esn = document.createElement("div")
+  var input = document.createElement("input")
+  esn.setAttribute("class", "input-group input-group-sm mb-3")
+  input.setAttribute("name", i)
+  esn.setAttribute("id", i)
+  input.setAttribute("type", "text")
+  input.setAttribute("class", "form-control")
+  input.setAttribute("aria-label", "Sizing example input")
+  input.setAttribute("aria-describedby", "inputGroup-sizing-sm")
+  input.setAttribute("placeholder", "ESN")
+  esn.appendChild(input)
+  document.getElementById("jello").appendChild(esn)
+  
+  
+})
+
+document.getElementById("minus").addEventListener("click", function() {
+  document.getElementById(i).remove()
+  i = i - 1
+})
+
+
+</script>
 </html>
