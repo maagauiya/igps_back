@@ -9,7 +9,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login ,logout
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
-import json 
+import json  
 from django.contrib import messages
 from django.contrib.auth.models import User
 from pymongo import MongoClient
@@ -154,7 +154,7 @@ def manage(request):
             }
     if request.user.is_superuser == True:
         if request.POST.get('reguser'):
-            url = "46.101.236.239:5001/reg"
+            url = "http://127.0.0.1:5001/reg"
             data = {
                 "username":request.POST.get('username'),
                 "email":request.POST.get('email'),
@@ -165,23 +165,32 @@ def manage(request):
 
             }
             connect = requests.post(url, headers=headers,json = data)
-            print(connect)
             collection=db2['new_users']
             cursor=collection.find({"username":request.POST.get('username')})
-            for doc in cursor:
-                user = User.objects.create_user(
-                        id=doc['_id'],
-                        username=doc['username'],
-                        email=doc['email'],
+            user = User.objects.create_user(
+                        id=cursor[0]["_id"],
+                        username=cursor[0]['username'],
+                        email=cursor[0]['email'],
                         password=request.POST.get('password'),
                         is_superuser=False,
                         first_name=request.POST.get('name'),
                         )
+            user.save()
+            client=MongoClient("mongodb+srv://maagauiya:loopcool@cluster0.f7uie.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+            db=client['igpstest']
+            collection=db['auth_user']
+            cursor=collection.find({"username":request.POST.get('username')})
+            li=[]
+            for i in cursor:
+                li.append(i['id'])
 
-                user.save()
-                break
+            if len(li)==2:
+                if li[0]>li[1]:
+                    collection.delete_one({'id':li[0]})
+                else:
+                    collection.delete_one({'id':li[1]})
         if request.POST.get('regdev'):
-            url = "46.101.236.239:5001/reg_smartone"
+            url = "http://127.0.0.1:5001/reg_smartone"
             collection=db2['new_users']
             cursor=collection.find({"username":"username"})
             idd=None
