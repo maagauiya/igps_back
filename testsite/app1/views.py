@@ -196,12 +196,19 @@ def manage(request):
             idd=None
             for i in cursor:
                 idd=i['_id']
-            data = {
-                "userid":idd,
-                "esn":request.POST.get('esn')
-            }
-            connect = requests.post(url, headers=headers,json = data)
-            print(connect)
+            n = []
+            for i in range(0, 15):
+                if(request.POST.get(i) == None):
+                    break;
+
+                n[i] = request.POST.get(i)
+            for i in range(len(n)):
+                data = {
+                    "userid":idd,
+                    "esn":n[i]
+                }
+                connect = requests.post(url, headers=headers,json = data)
+                print(connect)
         ##
         
         if request.POST.get('search'):
